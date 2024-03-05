@@ -1,3 +1,4 @@
+import javax.swing.JFrame;
 
 public class Main {
 
@@ -6,8 +7,15 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
+		MainFrame mainFrame = new MainFrame();
+		mainFrame.setVisible(true);
+
+		MainPanel panel = new MainPanel();
+		
+		mainFrame.add(panel) ;
+		mainFrame.pack();
+		
 	}
 
 }
