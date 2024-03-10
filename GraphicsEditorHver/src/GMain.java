@@ -1,8 +1,7 @@
-import javax.swing.JFrame;
 
-public class Main {
+public class GMain {
 
-	public Main() {
+	public GMain() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -11,11 +10,6 @@ public class Main {
 		MainFrame mainFrame = new MainFrame();
 		mainFrame.setVisible(true);
 
-		MainPanel panel = new MainPanel();
-		
-		mainFrame.add(panel) ;
-		mainFrame.pack();
-		
-	}
 
+	}
 }
