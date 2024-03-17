@@ -7,7 +7,7 @@ public class GMain {
 
 	public static void main(String[] args) {
 
-		MainFrame mainFrame = new MainFrame();
+		GMainFrame mainFrame = new GMainFrame();
 		mainFrame.setVisible(true);
 
 
