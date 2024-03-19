@@ -10,49 +10,45 @@ public class GShapeToolBar extends JToolBar {
 
 	private static final long serialVersionUID = 1L;
 
+	public enum EShapeButtons {
+		eRactangle,
+		eOval,
+		eLine, 
+		ePolygon
+	}
+	
 	private JRadioButton rectangleButton;
 	private JRadioButton ovalButton;
 	private JRadioButton lineButton;
 	private JRadioButton polygonButton;
 	private GDrawingPanel drawingPanel;
 
+
+
+	public GShapeToolBar(GMainFrame.ShapeActionHandler shapeActionHandler) {
 	
-	public GShapeToolBar(GDrawingPanel drawingPanel) {
-	this.drawingPanel = drawingPanel;
-	
+
+		// add ActionHandler
 	ButtonGroup buttonGroup = new ButtonGroup();
 
 	this.rectangleButton = new JRadioButton("rectangle");
+	this.rectangleButton.addActionListener(shapeActionHandler);
 	this.add(rectangleButton);
 	buttonGroup.add(rectangleButton);
-	rectangleButton.addActionListener(ac);
-	rectangleButton.setActionCommand("rectangle");
-	
+
 	this.ovalButton = new JRadioButton("oval");
+
+	this.ovalButton.addActionListener(shapeActionHandler);
 	this.add(ovalButton);
 	buttonGroup.add(ovalButton);
-	ovalButton.addActionListener(ac);
-	ovalButton.setActionCommand("oval");
-	
+
 	this.lineButton = new JRadioButton("line");
 	this.add(lineButton);
 	buttonGroup.add(lineButton);
-	lineButton.addActionListener(ac);
-	lineButton.setActionCommand("line");
-	
+
 	this.polygonButton = new JRadioButton("polygon");
 	this.add(polygonButton);
 	buttonGroup.add(polygonButton);
-	polygonButton.addActionListener(ac);
-	polygonButton.setActionCommand("polygon");
-	}
 
-	private ActionListener ac = new ActionListener() {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String com = e.getActionCommand();
-			drawingPanel.Shape(com);
-		}
-	};
+	}
 }
