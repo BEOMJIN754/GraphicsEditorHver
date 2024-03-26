@@ -19,6 +19,7 @@ public class GDrawingPanel extends JPanel {
 	
 	public GDrawingPanel() {
 		this.setBackground(Color.gray);
+		
 		MouseEventHandler mouseEventHandler = new MouseEventHandler();
 		this.addMouseListener(mouseEventHandler);
 		this.addMouseMotionListener(mouseEventHandler);
