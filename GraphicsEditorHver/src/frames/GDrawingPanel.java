@@ -64,6 +64,7 @@ public class GDrawingPanel extends JPanel {
 			System.out.println("mouseDragged");
 			shapeTool.draw(getGraphics());
 			shapeTool.setP2(e.getX(), e.getY());
+			
 		}
 
 		@Override
