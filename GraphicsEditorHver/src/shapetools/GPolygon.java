@@ -1,47 +1,64 @@
 package shapetools;
 
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.util.ArrayList;
+import java.awt.Graphics2D;
+
+import global.Constants;
 
 public class GPolygon extends GShape {
 
-    private Polygon polygon;
-    private ArrayList<Point> points;
+	private int xPoints[];
+	private int yPoints[];
+	private int nPoints;
+	
+	
+	public GPolygon() {
+		super(EDrawingStyle.eNPStyle);
+		this.xPoints = new int[Constants.NUM_POINTS];
+		this.yPoints = new int[Constants.NUM_POINTS];
+		this.nPoints =0;
+	}
+	public GPolygon clone() {
+		return new GPolygon();
+	}
+	
+	
+	@Override
+	public void drag(Graphics graphics) {
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setXORMode(graphics2D.getBackground());
+		//erase old shape 
+		graphics.drawPolyline(xPoints, yPoints, nPoints);
+		//draw new shape 
+	//	graphics.drawPolyline(xPoints, yPoints, nPoints);
 
-    public GPolygon() {
-        super(EDrawingStyle.eNPStyle);
-        this.polygon = new Polygon();
-        this.points = new ArrayList<>();
-    }
-
-    public GPolygon clone() {
-        return new GPolygon();
-    }
-
-    @Override
-    public void draw(Graphics graphics) {
-        // 그리기 전에 다각형을 업데이트
-        updatePolygon();
-        // 다각형 그리기
-        graphics.drawPolygon(polygon);
-    }
-
-    @Override
-    public void drag(Graphics graphics) {
-        // 드래그 시 동작 정의
-    }
-
-    public void addPoint(int x, int y) {
-        points.add(new Point(x, y));
-        updatePolygon(); // 점 추가 후 다각형 업데이트
-    }
-
-    private void updatePolygon() {
-        polygon.reset(); // 다각형 초기화
-        for (Point point : points) {
-            polygon.addPoint(point.x, point.y); // 모든 점을 다각형에 추가
-        }
-    }
+	}
+	@Override
+	public void draw(Graphics graphics) {
+		//draw new shape 
+		graphics.drawPolygon(xPoints, yPoints, nPoints);
+		
+	}
+	@Override
+	public void setOrigin(int x,int y) {
+		this.xPoints[nPoints] = x;
+		this.yPoints[nPoints] = y;
+		
+		this.nPoints++;
+		this.xPoints[nPoints] = x;
+		this.yPoints[nPoints] = y;
+		
+	
+	}
+	@Override
+	public void movePoint(int x,int y) {
+		this.xPoints[nPoints] = x;
+		this.yPoints[nPoints] = y;
+	}
+	@Override
+	public void addPoint(int x,int y) {
+		this.nPoints++;
+		this.xPoints[nPoints] = x;
+		this.yPoints[nPoints] = y;
+}
 }

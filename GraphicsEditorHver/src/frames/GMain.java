@@ -1,4 +1,5 @@
 package frames;
+import javax.swing.JFrame;
 
 public class GMain {
 
@@ -10,7 +11,8 @@ public class GMain {
 
 		GMainFrame mainFrame = new GMainFrame();
 		mainFrame.setVisible(true);
-
+		mainFrame.initialize();
 
 	}
+
 }
