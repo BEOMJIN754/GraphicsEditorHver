@@ -2,8 +2,9 @@ package shapetools;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
-public  class GLine extends GShape {
+public  class GLine extends GShape  {
 
 private Graphics graphics;
 	
@@ -15,6 +16,11 @@ private Graphics graphics;
 		return new GLine();
 	}
 	
+	@Override
+	public void draw(Graphics graphics) {
+		// TODO Auto-generated method stub
+		graphics.drawLine(x1, y1, ox2, oy2);
+	}
 	
 	@Override
 	public void drag(Graphics graphics) {
@@ -27,9 +33,15 @@ private Graphics graphics;
 		graphics2D.drawLine(x1, y1, x2, y2);
 		
 	}
+	
 	@Override
-	public void draw(Graphics graphics) {
+	public void click(Graphics graphics) {
 		// TODO Auto-generated method stub
-		graphics.drawLine(x1, y1, ox2, oy2);
+		
+	}
+	@Override
+	public void move(Graphics graphics) {
+		// TODO Auto-generated method stub
+		
 	}
 }

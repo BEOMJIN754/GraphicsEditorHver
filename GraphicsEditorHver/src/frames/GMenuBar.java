@@ -11,7 +11,7 @@ public class GMenuBar extends JMenuBar {
 	public GFileMenu fileMenu;
 
 	private GFileMenu editMenu;
-	
+	private GDrawingPanel drawingpanel;
 
 	public GMenuBar() {
 
@@ -30,7 +30,11 @@ public class GMenuBar extends JMenuBar {
 		
 		
 	}
+	public void associate(GDrawingPanel drawingpanel) {
 
+		this.drawingpanel = drawingpanel;
+		this.fileMenu.associate(drawingpanel);
+	}
 
 	public void initialize() {
 		// TODO Auto-generated method stub

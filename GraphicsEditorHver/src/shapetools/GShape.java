@@ -1,8 +1,12 @@
 package shapetools;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public abstract class GShape {
+public abstract class GShape implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+
 	public enum EDrawingStyle {
 		e2PStyle, eNPStyle
 	}
@@ -27,9 +31,14 @@ public abstract class GShape {
 
 	public abstract GShape clone();
 
-	public abstract void drag(Graphics graphics);
-
 	public abstract void draw(Graphics graphics);
+	
+	public abstract void drag(Graphics graphics);
+	
+	public abstract void click(Graphics graphics);
+	
+	public abstract void move(Graphics graphics);
+	
 
 	public void setOrigin(int x1, int y1) {
 		this.x1 = x1;

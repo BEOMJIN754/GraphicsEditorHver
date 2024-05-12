@@ -2,10 +2,11 @@ package shapetools;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 import shapetools.GShape.EDrawingStyle;
 
-public  class GOval extends GShape {
+public  class GOval extends GShape  {
 
 private Graphics graphics;
 	
@@ -15,6 +16,13 @@ private Graphics graphics;
 	public GOval clone() {
 		return new GOval();
 	}
+	
+	@Override
+	public void draw(Graphics graphics) {
+		//draw new shape 
+		graphics.drawOval(x1, y1, x2-x1, y2-y1);
+	}
+	
 	@Override
 	public void drag(Graphics graphics) {
 		Graphics2D graphics2D = (Graphics2D) graphics;
@@ -24,11 +32,16 @@ private Graphics graphics;
 		
 		//draw new shape 
 		graphics2D.drawOval(x1, y1, x2-x1, y2-y1);
+	}
+
+	@Override
+	public void click(Graphics graphics) {
+		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public void draw(Graphics graphics) {
-		//draw new shape 
-		graphics.drawOval(x1, y1, x2-x1, y2-y1);
+	public void move(Graphics graphics) {
+		// TODO Auto-generated method stub
+		
 	}
 }

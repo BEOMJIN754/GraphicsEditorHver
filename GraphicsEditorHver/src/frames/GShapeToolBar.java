@@ -1,5 +1,8 @@
 package frames;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 import javax.swing.JToolBar;
@@ -9,11 +12,13 @@ import global.Constants.EShapeButtons;
 public class GShapeToolBar extends JToolBar {
 
 	private static final long serialVersionUID = 1L;
+	GDrawingPanel drawingPanel;
 
-	public GShapeToolBar(GMainFrame.ShapeActionHandler shapeActionHandler) {
+	public GShapeToolBar() {
 
 		// add ActionHandler
 		ButtonGroup buttonGroup = new ButtonGroup();
+		ShapeActionHandler shapeActionHandler = new ShapeActionHandler();
 
 		for (EShapeButtons eShapeButtons : EShapeButtons.values()) {
 			JRadioButton button = new JRadioButton(eShapeButtons.getText());
@@ -26,9 +31,26 @@ public class GShapeToolBar extends JToolBar {
 	}
 
 	public void initialize() {
-
-		JRadioButton defaultButton = (JRadioButton) (this.getComponent(EShapeButtons.eRactangle.ordinal()));
+		JRadioButton defaultButton 
+		= (JRadioButton) (this.getComponent(EShapeButtons.eRactangle.ordinal()));
 		defaultButton.doClick();
+	}
+
+	public void associate(GDrawingPanel drawingPanel) {
+		this.drawingPanel = drawingPanel;
+	}
+	
+	private void setShapeTool(EShapeButtons eShapeButton ) {
+		drawingPanel.setShapeTool(eShapeButton.getShapeTool());
+	}
+	
+	private class ShapeActionHandler implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			EShapeButtons eShapeButton = EShapeButtons.valueOf(e.getActionCommand());
+			setShapeTool(eShapeButton);
+
+		}
 
 	}
 

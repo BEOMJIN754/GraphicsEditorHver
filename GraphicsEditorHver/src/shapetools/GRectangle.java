@@ -1,10 +1,11 @@
 package shapetools;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 import shapetools.GShape.EDrawingStyle;
 
-public class GRectangle extends GShape {
+public class GRectangle extends GShape  {
 
 	private Graphics graphics;
 	
@@ -15,6 +16,12 @@ public class GRectangle extends GShape {
 		return new GRectangle();
 	}
 	
+	@Override
+	public void draw(Graphics graphics) {
+		//draw new shape 
+		graphics.drawRect(x1, y1, x2-x1, y2-y1);
+		
+	}
 	
 	@Override
 	public void drag(Graphics graphics) {
@@ -25,10 +32,15 @@ public class GRectangle extends GShape {
 		//draw new shape 
 		graphics2D.drawRect(x1, y1, x2-x1, y2-y1);
 	}
+	
 	@Override
-	public void draw(Graphics graphics) {
-		//draw new shape 
-		graphics.drawRect(x1, y1, x2-x1, y2-y1);
+	public void click(Graphics graphics) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void move(Graphics graphics) {
+		// TODO Auto-generated method stub
 		
 	}
 }

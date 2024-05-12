@@ -20,8 +20,6 @@ public class Constants {
 			this.shapeTool = shapeTool;
 		}
 		
-	
-
 		public String getText() {
 			return text;
 		}
@@ -29,5 +27,6 @@ public class Constants {
 			return this.shapeTool;
 		}
 	}
+	
 	public final static int NUM_POINTS = 20;
 }

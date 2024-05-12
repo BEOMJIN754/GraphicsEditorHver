@@ -14,34 +14,31 @@ public class GMainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	//component
+	//부가적인 애들
 	private GMenuBar menuBar;
 	private GShapeToolBar shapeToolBar;
-	private GDrawingPanel drawingPanel; 
+	
+	private GDrawingPanel drawingPanel; //메인 자식 
 	
 	public GMainFrame() {
 		this.setSize(400, 600);
-		
-	//	LayoutManager layoutManager = new FlowLayout();
-		//LayoutManager layoutManager = new CardLayout();
+		this.setLocationRelativeTo(null);
 		LayoutManager layoutManager = new BorderLayout();
-		//자식들으 ㅣ배치를 정리해준 것 셋 레이아웃 이라는 관리자를 만듦
-		//LayoutManager layoutManager = new BoxLayout(this.getContentPane(), BoxLayout.X_AXIS);
 		this.setLayout(layoutManager);
 		
 		this.menuBar = new GMenuBar();
 		this.setJMenuBar(this.menuBar);
 		
-
-		ShapeActionHandler shapeActionHandler = new ShapeActionHandler();
-		this.shapeToolBar = new GShapeToolBar(shapeActionHandler);
+		this.shapeToolBar = new GShapeToolBar();
 		this.add(shapeToolBar,BorderLayout.NORTH);
 		
 		this.drawingPanel = new GDrawingPanel();
 		this.add(drawingPanel, BorderLayout.CENTER);
 	
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		
-			
+		//associate 
+		this.menuBar.associate(this.drawingPanel);
+		this.shapeToolBar.associate(this.drawingPanel);
 		}
 	//method
 	public void initialize() {
@@ -55,17 +52,7 @@ public class GMainFrame extends JFrame {
 	}
 	
 		
-	public class ShapeActionHandler implements ActionListener{
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			EShapeButtons eShapeButton = EShapeButtons.valueOf(e.getActionCommand());
-			drawingPanel.setShapeTool(eShapeButton.getShapeTool());
-			
-		}	
-		
-	}
 
 	
 }
