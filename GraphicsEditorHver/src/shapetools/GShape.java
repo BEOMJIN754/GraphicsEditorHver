@@ -5,7 +5,7 @@ import java.awt.Shape;
 import java.io.Serializable;
 
 public abstract class GShape implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	public enum EDrawingStyle {
@@ -13,7 +13,7 @@ public abstract class GShape implements Serializable {
 	}
 
 	private EDrawingStyle eDrawingStyle;
-		
+
 	protected Shape shape;
 	protected int x1, y1, x2, y2, ox2, oy2;
 
@@ -21,7 +21,7 @@ public abstract class GShape implements Serializable {
 		return this.eDrawingStyle;
 	}
 
-	public GShape(EDrawingStyle eDrawingStyle,Shape shape) {
+	public GShape(EDrawingStyle eDrawingStyle, Shape shape) {
 		this.eDrawingStyle = eDrawingStyle;
 		this.shape = shape;
 		this.x1 = 0;
@@ -30,24 +30,24 @@ public abstract class GShape implements Serializable {
 		this.y2 = 0;
 		this.ox2 = 0;
 		this.oy2 = 0;
+		
 
 	}
 
 	public abstract GShape clone();
 
 	public abstract void draw(Graphics graphics);
-	
+
 	public abstract void drag(Graphics graphics);
-	
+
+	// ploygon 그리기용
 	public abstract void click(Graphics graphics);
-	
-	public abstract void move(Graphics graphics);
-	
+
 
 	public void setOrigin(int x1, int y1) {
 		this.x1 = x1;
 		this.y1 = y1;
-		
+
 		this.x2 = x1;
 		this.y2 = y1;
 		this.ox2 = x1;
@@ -68,18 +68,20 @@ public abstract class GShape implements Serializable {
 	}
 
 	public boolean onShape(int x, int y) {
-		
+		if (shape.contains(x, y)) {
+			return true;
+		}
+
 		return false;
 	}
-	
-	public  void startMove(int x, int y) {};
 
-	public  void keepMove(int x, int y) {
-	}
-	
-	public  void stopMove(int x, int y) {};
+	public void startMove(int x, int y) {
+		
+	};
 
+	public abstract void keepMove(Graphics graphics, int x, int y);
 
-	
+	public void stopMove(int x, int y) {
+	};
 
 }

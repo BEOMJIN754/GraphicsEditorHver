@@ -41,8 +41,10 @@ private Graphics graphics;
 		// TODO Auto-generated method stub
 		
 	}
+
+
 	@Override
-	public void move(Graphics graphics) {
+	public void keepMove(Graphics graphics, int x, int y) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -34,17 +34,7 @@ public class GPolygon extends GShape {
 //		System.out.println();
 //	}
 
-	@Override
-	public void click(Graphics graphics) {
-		Graphics2D graphics2D = (Graphics2D) graphics;
-		graphics2D.setXORMode(graphics2D.getBackground());
-		// erase old shape
-		// nPoints include next points(extra points)
-		graphics.drawPolyline(xPoints, yPoints, nPoints-1);
-		// draw new shape
-		graphics.drawPolygon(xPoints, yPoints, nPoints-1);
 
-	}
 
 	@Override
 	public void draw(Graphics graphics) {
@@ -58,11 +48,19 @@ public class GPolygon extends GShape {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void move(Graphics graphics) {
-		
+	public void click(Graphics graphics) {
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setXORMode(graphics2D.getBackground());
+		// erase old shape
+		// nPoints include next points(extra points)
+		graphics.drawPolyline(xPoints, yPoints, nPoints-1);
+		// draw new shape
+		graphics.drawPolygon(xPoints, yPoints, nPoints-1);
+
 	}
+	
 
 	@Override
 	public void setOrigin(int x, int y) {
@@ -91,5 +89,9 @@ public class GPolygon extends GShape {
 //		printPoints(yPoints);
 	}
 
+	@Override
+	public void keepMove(Graphics graphics, int x, int y) {
+		// TODO Auto-generated method stub
+	}
 	
 }

@@ -28,9 +28,9 @@ public class GDrawingPanel extends JPanel {
 		eIdle, e2PState, eNPState, eTransformation
 	}
 
-	private enum EAnchor {
-		eMove, eResize, eRotate
-	}
+//	private enum EAnchor {
+//		eMove, eResize, eRotate
+//	}
 
 	private EDrawingState eDrawingState;
 //	private enum ETransformation{
@@ -97,7 +97,7 @@ public class GDrawingPanel extends JPanel {
 
 //	private void moveDrawing(int x, int y) {
 //		currentShape.movePoint(x, y);
-//		// Only Polygon: following mouse
+//		// only polygon
 //		currentShape.move(getGraphics());
 //	}
 
@@ -112,6 +112,12 @@ public class GDrawingPanel extends JPanel {
 	private void stopDrawing(int x, int y) {
 		currentShape.addPoint(x, y);
 		shapes.add(currentShape);
+	}
+	
+	
+	public void keepMoving(int x, int y) {
+		currentShape.keepMove(getGraphics(), x, y);
+		
 	}
 
 	private GShape onShape(int x, int y) {
@@ -157,6 +163,8 @@ public class GDrawingPanel extends JPanel {
 //				moveDrawing(e.getX(), e.getY());
 //				eDrawingState = EDrawingState.eNPState;
 //			}
+			
+
 		}
 
 		@Override
@@ -188,7 +196,7 @@ public class GDrawingPanel extends JPanel {
 			if (eDrawingState == EDrawingState.e2PState) {
 				keepDrawing(e.getX(), e.getY());
 			} else if (eDrawingState == EDrawingState.eTransformation) {
-				currentShape.keepMove(e.getX(), e.getY());
+				keepMoving(e.getX(), e.getY());
 			}
 		}
 
@@ -215,5 +223,7 @@ public class GDrawingPanel extends JPanel {
 		}
 
 	}
+
+
 
 }
