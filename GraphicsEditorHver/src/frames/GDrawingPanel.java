@@ -25,11 +25,17 @@ public class GDrawingPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private enum EDrawingState {
-		eIdle, e2PState, eNPState
+		eIdle, e2PState, eNPState, eTransformation
 	}
 
 	private EDrawingState eDrawingState;
-
+//	private enum ETransformation{
+//		eDraw,
+//		eMove,
+//		eResize,
+//		eRotate
+//	}
+//	private ETransformation eTransformation;
 	// component 부품
 	private Vector<GShape> shapes;
 	private GShape shapeTool;
@@ -64,7 +70,7 @@ public class GDrawingPanel extends JPanel {
 	}
 
 	public void setShapes(Object object) {
-		this.shapes = (Vector<GShape>)object;
+		this.shapes = (Vector<GShape>) object;
 	}
 
 	// methods
@@ -84,7 +90,7 @@ public class GDrawingPanel extends JPanel {
 		currentShape.movePoint(x, y);
 		currentShape.drag(getGraphics());
 	}
-	
+
 	private void moveDrawing(int x, int y) {
 		currentShape.movePoint(x, y);
 		// Only Polygon: following mouse
@@ -93,7 +99,7 @@ public class GDrawingPanel extends JPanel {
 
 	private void continueDrawing(int x, int y) {
 		currentShape.addPoint(x, y);
-		//Only Polygon
+		// Only Polygon
 		currentShape.click(getGraphics());
 		// re-draw
 		currentShape.draw(getGraphics());
@@ -103,6 +109,17 @@ public class GDrawingPanel extends JPanel {
 		currentShape.addPoint(x, y);
 		shapes.add(currentShape);
 	}
+	
+//	private EAnchor onShape(int x,int y ) {
+//	EAnchor eAnchor = null;
+//	for(GShape shape:this.shapes) {
+//		boolean isShape  = shape.onShape(x,y);
+//		if(isShape) {
+//			return shape;
+//		}
+//	}
+//	return null;
+//}
 
 	private class MouseEventHandler implements MouseListener, MouseMotionListener {
 
@@ -137,9 +154,15 @@ public class GDrawingPanel extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			if (eDrawingState == EDrawingState.eIdle) {
+//				currentShape = onShape(e.getX(), e.getY());
+//				if(onShape(e.getX(),e.getY())==null)
 				if (shapeTool.getEDrawingStyle() == EDrawingStyle.e2PStyle) {
 					startDrawing(e.getX(), e.getY());
 					eDrawingState = EDrawingState.e2PState;
+				}
+				else {
+					currentShape.startMove(e.getX(),e.getY());
+					eDrawingState = EDrawingState.eTransformation;
 				}
 
 			}
@@ -149,14 +172,18 @@ public class GDrawingPanel extends JPanel {
 		public void mouseDragged(MouseEvent e) {
 			if (eDrawingState == EDrawingState.e2PState) {
 				keepDrawing(e.getX(), e.getY());
+			}else if (eDrawingState == EDrawingState.eTransformation) {
+				currentShape.keepMove(e.getX(), e.getY());
 			}
-
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			if (eDrawingState == EDrawingState.e2PState) {
 				stopDrawing(e.getX(), e.getY());
+				eDrawingState = EDrawingState.eIdle;
+			}else if (eDrawingState == EDrawingState.eTransformation) {
+				currentShape.stopMove(e.getX(), e.getY());
 				eDrawingState = EDrawingState.eIdle;
 			}
 

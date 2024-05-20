@@ -16,7 +16,7 @@ public class GPolygon extends GShape {
 	private int moveY;
 
 	public GPolygon() {
-		super(EDrawingStyle.eNPStyle);
+		super(EDrawingStyle.eNPStyle, null);
 		this.xPoints = new int[Constants.NUM_POINTS];
 		this.yPoints = new int[Constants.NUM_POINTS];
 		this.nPoints = 0;
@@ -26,12 +26,12 @@ public class GPolygon extends GShape {
 		return new GPolygon();
 	}
 
-	public void printPoints(int[] points) {
-		for (int i = 0; i < points.length; i++) {
-			System.out.print(points[i] + ", ");
-		}
-		System.out.println();
-	}
+//	public void printPoints(int[] points) {
+//		for (int i = 0; i < points.length; i++) {
+//			System.out.print(points[i] + ", ");
+//		}
+//		System.out.println();
+//	}
 
 	@Override
 	public void click(Graphics graphics) {
@@ -86,8 +86,8 @@ public class GPolygon extends GShape {
 		this.yPoints[nPoints] = y;
 		this.nPoints++;
 		
-		printPoints(xPoints);
-		printPoints(yPoints);
+//		printPoints(xPoints);
+//		printPoints(yPoints);
 	}
 
 	
