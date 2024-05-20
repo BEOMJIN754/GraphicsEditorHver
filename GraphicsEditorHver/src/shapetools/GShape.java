@@ -68,6 +68,7 @@ public abstract class GShape implements Serializable {
 	}
 
 	public boolean onShape(int x, int y) {
+		
 		return false;
 	}
 	
