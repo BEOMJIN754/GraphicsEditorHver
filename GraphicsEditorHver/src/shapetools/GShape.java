@@ -44,6 +44,7 @@ public abstract class GShape implements Serializable {
 	public abstract void click(Graphics graphics);
 
 
+
 	public void setOrigin(int x1, int y1) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -68,16 +69,20 @@ public abstract class GShape implements Serializable {
 	}
 
 	public boolean onShape(int x, int y) {
+		System.out.println("폴리곤 그려진 상태");
 		if (shape.contains(x, y)) {
+			System.out.println("Selected");
 			return true;
+		}
+
+		if(shape.getBounds2D().contains(x,y)) {
+			System.out.println("이거냐??");
 		}
 
 		return false;
 	}
 
-	public void startMove(int x, int y) {
-		
-	};
+	public abstract void startMove(int x, int y);
 
 	public abstract void keepMove(Graphics graphics, int x, int y);
 

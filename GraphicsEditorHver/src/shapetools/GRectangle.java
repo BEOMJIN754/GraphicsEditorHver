@@ -45,7 +45,8 @@ public class GRectangle extends GShape {
 
 	}
 
-
+	
+	@Override
 	public void startMove(int x, int y) {
 		Rectangle shape = (Rectangle) this.shape;
 		this.offsetX = (int) (x - shape.getX());

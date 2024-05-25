@@ -3,6 +3,7 @@ package shapetools;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.io.Serializable;
 
 import global.Constants;
@@ -15,6 +16,8 @@ public class GPolygon extends GShape {
 	
 	private int moveX;
 	private int moveY;
+	
+	private int offsetX, offsetY;
 
 	public GPolygon() {
 		super(EDrawingStyle.eNPStyle, new Polygon());
@@ -91,7 +94,23 @@ public class GPolygon extends GShape {
 
 	@Override
 	public void keepMove(Graphics graphics, int x, int y) {
-		// TODO Auto-generated method stub
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setXORMode(graphics2D.getBackground());
+		Rectangle shape = (Rectangle) this.shape;
+		
+		// remove rectangle
+		graphics2D.draw(shape);
+		// redraw
+		shape.setFrame(x - offsetX, y - offsetY, shape.getWidth(), shape.getHeight());
+		graphics2D.draw(shape);
+	}
+
+	@Override
+	public void startMove(int x, int y) {
+		Rectangle shape = (Rectangle) this.shape;
+		this.offsetX = (int) (x - shape.getX());
+        this.offsetY = (int) (y - shape.getY());
+		
 	}
 	
 }

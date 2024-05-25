@@ -2,6 +2,8 @@ package frames;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -122,6 +124,7 @@ public class GDrawingPanel extends JPanel {
 
 	private GShape onShape(int x, int y) {
 		for (GShape shape : this.shapes) {
+			System.out.println("Panel onShape");
 			boolean isShape = shape.onShape(x, y);
 			if (isShape) {
 				return shape;

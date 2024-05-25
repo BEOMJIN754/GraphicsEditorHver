@@ -48,4 +48,9 @@ private Graphics graphics;
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void startMove(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
 }
