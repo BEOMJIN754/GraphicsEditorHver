@@ -1,6 +1,6 @@
 package frames;
 
-import javax.swing.SwingUtilities;
+import interfaces.CountdownListener;
 
 public class GMain {
 
@@ -12,37 +12,32 @@ public class GMain {
 
 		TMainFrame tMainFrame = new TMainFrame();
 		tMainFrame.setVisible(true);
-		
-		//백그라운드에서 생성
-		GMainFrame mainFrame = new GMainFrame();
-		GTimer gTimer = new GTimer(5, new GTimer.CountdownListener() {
-            @Override
-            public void onTick(int seconds) {
-                // 타이머의 남은 시간을 AFrame에 업데이트
-            	 SwingUtilities.invokeLater(new Runnable() {
-                     @Override
-                     public void run() {
-                         tMainFrame.updateTimerLabel(seconds);
-                     }
-                 });
-            }
-		
 
-            @Override
-            public void onFinish() {
-                SwingUtilities.invokeLater(() -> {
-                    // AFrame을 닫고 BFrame을 표시
-                    tMainFrame.dispose();
-                    mainFrame.setVisible(true);
-                });
-            }
-        });
-        gTimer.start();
-    }
-		
-//		mainFrame.setVisible(true);
-//		mainFrame.initialize();
+		// 백그라운드에서 생성
+		GMainFrame mainFrame = new GMainFrame();
+
+		// ----------------------
+		// timer listener
+		CountdownListener listener = new CountdownListener() {
+
+			// timer continue
+			@Override
+			public void onTick(int seconds) {
+				tMainFrame.updateTimerLabel(seconds);
+			}
+
+			// timer end
+			@Override
+			public void onFinish() {
+				tMainFrame.dispose();
+				mainFrame.initialize();
+				mainFrame.setVisible(true);
+			}
+		};
+
+		// ----------------------
+		GTimer countdownTimer = new GTimer(5, listener);
+		countdownTimer.start();
 
 	}
-
-
+}

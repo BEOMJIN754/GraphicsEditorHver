@@ -31,19 +31,18 @@ public class GShapeToolBar extends JToolBar {
 	}
 
 	public void initialize() {
-		JRadioButton defaultButton 
-		= (JRadioButton) (this.getComponent(EShapeButtons.eRactangle.ordinal()));
+		JRadioButton defaultButton = (JRadioButton) (this.getComponent(EShapeButtons.eRactangle.ordinal()));
 		defaultButton.doClick();
 	}
 
 	public void associate(GDrawingPanel drawingPanel) {
 		this.drawingPanel = drawingPanel;
 	}
-	
-	private void setShapeTool(EShapeButtons eShapeButton ) {
+
+	private void setShapeTool(EShapeButtons eShapeButton) {
 		drawingPanel.setShapeTool(eShapeButton.getShapeTool());
 	}
-	
+
 	private class ShapeActionHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
