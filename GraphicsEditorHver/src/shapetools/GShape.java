@@ -1,6 +1,7 @@
 package shapetools;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.io.Serializable;
 
@@ -36,7 +37,10 @@ public abstract class GShape implements Serializable {
 
 	public abstract GShape clone();
 
-	public abstract void draw(Graphics graphics);
+	public void draw(Graphics graphics) {
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.draw(shape);
+	};
 
 	public abstract void drag(Graphics graphics);
 
@@ -77,14 +81,20 @@ public abstract class GShape implements Serializable {
 
 		if(shape.getBounds2D().contains(x,y)) {
 			System.out.println("이거냐??");
+			return true;
 		}
 
 		return false;
 	}
 
-	public abstract void startMove(int x, int y);
+	public  void startMove(Graphics graphics, int x, int y) {
+		//좌표 저장
+		this.setOrigin(x, y);
+	};
 
-	public abstract void keepMove(Graphics graphics, int x, int y);
+	public void keepMove(Graphics graphics, int x, int y) {
+		this.movePoint(x, y);
+	};
 
 	public void stopMove(int x, int y) {
 	};

@@ -161,9 +161,9 @@ public class GDrawingPanel extends JPanel {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			// 폴리곤 그릴 때 마지막 점 위치(마우스 포인터) 따라가면서 그리기
+//			 //폴리곤 그릴 때 마지막 점 위치(마우스 포인터) 따라가면서 그리기
 //			if (eDrawingState == EDrawingState.eNPState) {
-//				moveDrawing(e.getX(), e.getY());
+//				continueDrawing(e.getX(), e.getY());
 //				eDrawingState = EDrawingState.eNPState;
 //			}
 			
@@ -186,7 +186,7 @@ public class GDrawingPanel extends JPanel {
 					}
 					// 도형 내 클릭했을 때 MOVE
 				} else {
-					currentShape.startMove(e.getX(), e.getY());
+					currentShape.startMove(getGraphics(), e.getX(), e.getY());
 					eDrawingState = EDrawingState.eTransformation;
 				}
 

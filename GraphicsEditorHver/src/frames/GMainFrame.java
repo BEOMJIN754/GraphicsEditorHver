@@ -21,7 +21,7 @@ public class GMainFrame extends JFrame {
 	private GDrawingPanel drawingPanel; //메인 자식 
 	
 	public GMainFrame() {
-		this.setSize(400, 600);
+		this.setSize(800, 600);
 		this.setLocationRelativeTo(null);
 		LayoutManager layoutManager = new BorderLayout();
 		this.setLayout(layoutManager);
@@ -34,7 +34,7 @@ public class GMainFrame extends JFrame {
 		
 		this.drawingPanel = new GDrawingPanel();
 		this.add(drawingPanel, BorderLayout.CENTER);
-	
+		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		//associate 
 		this.menuBar.associate(this.drawingPanel);

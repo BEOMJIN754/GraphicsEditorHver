@@ -105,7 +105,6 @@ public class GPolygon extends GShape {
 		graphics2D.draw(shape);
 	}
 
-	@Override
 	public void startMove(int x, int y) {
 		Rectangle shape = (Rectangle) this.shape;
 		this.offsetX = (int) (x - shape.getX());

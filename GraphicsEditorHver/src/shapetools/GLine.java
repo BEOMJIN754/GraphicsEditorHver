@@ -2,6 +2,7 @@ package shapetools;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.io.Serializable;
 
@@ -41,16 +42,22 @@ private Graphics graphics;
 		// TODO Auto-generated method stub
 		
 	}
-
-
-	@Override
-	public void keepMove(Graphics graphics, int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
+	
 	public void startMove(int x, int y) {
-		// TODO Auto-generated method stub
+		super.startMove(graphics, x, y);
+	}
+
+	public void keepMove(Graphics graphics, int x, int y) {
+		super.keepMove(graphics, x, y);
+		
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setXORMode(graphics2D.getBackground());
+		Line2D.Float shape = (Line2D.Float) this.shape;
+		
+		graphics2D.draw(shape);
+		shape.setLine(shape.getX1()+x2-ox2,shape.getY1()+y2-oy2,shape.getX2()+x2-ox2,shape.getY2()+y2-oy2);
+		graphics2D.draw(shape);
 		
 	}
+	
 }
