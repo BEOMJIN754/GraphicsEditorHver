@@ -22,6 +22,7 @@ public class GMainFrame extends JFrame {
 	
 	public GMainFrame() {
 		this.setSize(800, 600);
+		this.setTitle("Graphics Editor");
 		this.setLocationRelativeTo(null);
 		LayoutManager layoutManager = new BorderLayout();
 		this.setLayout(layoutManager);

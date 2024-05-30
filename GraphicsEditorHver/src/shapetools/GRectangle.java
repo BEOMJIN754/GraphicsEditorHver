@@ -20,7 +20,6 @@ public class GRectangle extends GShape {
 		return new GRectangle();
 	}
 
-
 	@Override
 	public void drag(Graphics graphics) {
 		Graphics2D graphics2D = (Graphics2D) graphics;
@@ -35,26 +34,23 @@ public class GRectangle extends GShape {
 
 	@Override
 	public void click(Graphics graphics) {
-		// TODO Auto-generated method stub
-
 	}
 
-	
 	public void startMove(int x, int y) {
 		super.startMove(graphics, x, y);
 	};
 
-	public void keepMove(Graphics graphics ,int x, int y) {
+	public void keepMove(Graphics graphics, int x, int y) {
 		super.keepMove(graphics, x, y);
-		
+
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		graphics2D.setXORMode(graphics2D.getBackground());
 		RectangularShape shape = (RectangularShape) this.shape;
-		
+
 		// remove rectangle
 		graphics2D.draw(shape);
 		// redraw
-		shape.setFrame(shape.getX() +x2-ox2, shape.getY()+y2-oy2, shape.getWidth(), shape.getHeight());
+		shape.setFrame(shape.getX() + x2 - ox2, shape.getY() + y2 - oy2, shape.getWidth(), shape.getHeight());
 		graphics2D.draw(shape);
 
 	};

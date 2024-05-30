@@ -1,6 +1,7 @@
 package frames;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -112,25 +113,35 @@ public class GDrawingPanel extends JPanel {
 	}
 
 	private void stopDrawing(int x, int y) {
-		currentShape.addPoint(x, y);
+		// currentShape.addPoint(x, y);
 		shapes.add(currentShape);
+		currentShape.setSelected(getGraphics());
 	}
-	
-	
+
 	public void keepMoving(int x, int y) {
 		currentShape.keepMove(getGraphics(), x, y);
-		
+
 	}
 
 	private GShape onShape(int x, int y) {
 		for (GShape shape : this.shapes) {
-			System.out.println("Panel onShape");
 			boolean isShape = shape.onShape(x, y);
 			if (isShape) {
 				return shape;
 			}
 		}
 		return null;
+	}
+
+	public void changeCursor(int x, int y) {
+		GShape shape = this.onShape(x, y);
+		if (shape == null) {
+			this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		} else {
+			this.setCursor(shape.getCursor());
+			System.out.println("123");
+		}
+
 	}
 
 	private class MouseEventHandler implements MouseListener, MouseMotionListener {
@@ -161,12 +172,15 @@ public class GDrawingPanel extends JPanel {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-//			 //폴리곤 그릴 때 마지막 점 위치(마우스 포인터) 따라가면서 그리기
+			if (eDrawingState == EDrawingState.eIdle) {
+				changeCursor(e.getX(), e.getY());
+			}
+
+			// 폴리곤 그릴 때 마지막 점 위치(마우스 포인터) 따라가면서 그리기
 //			if (eDrawingState == EDrawingState.eNPState) {
 //				continueDrawing(e.getX(), e.getY());
 //				eDrawingState = EDrawingState.eNPState;
 //			}
-			
 
 		}
 
@@ -226,7 +240,5 @@ public class GDrawingPanel extends JPanel {
 		}
 
 	}
-
-
 
 }

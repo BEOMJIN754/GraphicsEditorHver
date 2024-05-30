@@ -12,7 +12,7 @@ import global.Constants.EShapeButtons;
 public class GShapeToolBar extends JToolBar {
 
 	private static final long serialVersionUID = 1L;
-	GDrawingPanel drawingPanel;
+	private GDrawingPanel drawingPanel;
 
 	public GShapeToolBar() {
 
@@ -40,7 +40,7 @@ public class GShapeToolBar extends JToolBar {
 	}
 
 	private void setShapeTool(EShapeButtons eShapeButton) {
-		drawingPanel.setShapeTool(eShapeButton.getShapeTool());
+		this.drawingPanel.setShapeTool(eShapeButton.getShapeTool());
 	}
 
 	private class ShapeActionHandler implements ActionListener {

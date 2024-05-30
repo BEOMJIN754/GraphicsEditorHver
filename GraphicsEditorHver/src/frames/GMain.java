@@ -36,7 +36,7 @@ public class GMain {
 		};
 
 		// ----------------------
-		GTimer countdownTimer = new GTimer(5, listener);
+		GTimer countdownTimer = new GTimer(3, listener);
 		countdownTimer.start();
 
 	}
