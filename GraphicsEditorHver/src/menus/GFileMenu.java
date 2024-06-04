@@ -15,7 +15,7 @@ import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import frames.GDrawingPanel;
+import frames.draw.GDrawingPanel;
 import shapetools.GShape;
 
 public class GFileMenu extends JMenu {

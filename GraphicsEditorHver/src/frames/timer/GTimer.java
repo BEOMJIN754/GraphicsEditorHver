@@ -1,4 +1,4 @@
-package frames;
+package frames.timer;
 
 import interfaces.CountdownListener;
 

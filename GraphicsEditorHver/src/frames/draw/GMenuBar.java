@@ -1,4 +1,4 @@
-package frames;
+package frames.draw;
 import javax.swing.JMenuBar;
 
 import menus.GFileMenu;

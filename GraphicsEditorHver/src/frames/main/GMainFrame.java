@@ -1,4 +1,4 @@
-package frames;
+package frames.main;
 import java.awt.BorderLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
@@ -7,6 +7,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 
+import frames.color.GColorPanel;
+import frames.draw.GDrawingPanel;
+import frames.draw.GMenuBar;
+import frames.draw.GShapeToolBar;
 import global.Constants.EShapeButtons;
 
 public class GMainFrame extends JFrame {
@@ -17,6 +21,7 @@ public class GMainFrame extends JFrame {
 	//부가적인 애들
 	private GMenuBar menuBar;
 	private GShapeToolBar shapeToolBar;
+	private GColorPanel colorPanel;
 	
 	private GDrawingPanel drawingPanel; //메인 자식 
 	
@@ -40,6 +45,7 @@ public class GMainFrame extends JFrame {
 		//associate 
 		this.menuBar.associate(this.drawingPanel);
 		this.shapeToolBar.associate(this.drawingPanel);
+		this.drawingPanel.associate(this.colorPanel);
 		}
 	//method
 	public void initialize() {

@@ -1,10 +1,12 @@
 package shapetools;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.io.Serializable;
 
@@ -94,8 +96,8 @@ public abstract class GShape implements Serializable {
 		Graphics2D graphics2D = (Graphics2D) graphics;
 
 		Rectangle rectangle = this.shape.getBounds();
-		int x = rectangle.x;
-		int y = rectangle.y;
+		int x = rectangle.x -5;
+		int y = rectangle.y -5;
 		int w = rectangle.width;
 		int h = rectangle.height;
 		int ANCHOR_WIDTH = 10;
@@ -113,7 +115,11 @@ public abstract class GShape implements Serializable {
 		this.anchors[EAnchors.eSE.ordinal()] = new Ellipse2D.Float(x + w, y + h, ANCHOR_WIDTH, ANCHOR_HEIGHT);
 
 		for (Ellipse2D.Float anchor : this.anchors) {
+			graphics2D.setColor(Color.WHITE);
+			graphics2D.fill(anchor);
+			graphics2D.setColor(Color.BLACK);
 			graphics2D.draw(anchor);
+			
 		}
 
 	}
@@ -134,6 +140,32 @@ public abstract class GShape implements Serializable {
 		this.oy2 = this.y2;
 		this.x2 = x2;
 		this.y2 = y2;
+	}
+
+	private void updateAnchors() {
+		 if (this.anchors != null) {
+		        Rectangle bounds = this.shape.getBounds();
+		        int x = bounds.x;
+		        int y = bounds.y;
+		        int w = bounds.width;
+		        int h = bounds.height;
+		        int ANCHOR_WIDTH = 10;
+		        int ANCHOR_HEIGHT = 10;
+
+		        this.anchors[EAnchors.eRR.ordinal()].setFrame(x + w / 2, y - 30, ANCHOR_WIDTH, ANCHOR_HEIGHT);
+		        this.anchors[EAnchors.eNN.ordinal()].setFrame(x + w / 2, y, ANCHOR_WIDTH, ANCHOR_HEIGHT);
+		        this.anchors[EAnchors.eSS.ordinal()].setFrame(x + w / 2, y + h, ANCHOR_WIDTH, ANCHOR_HEIGHT);
+		        this.anchors[EAnchors.eEE.ordinal()].setFrame(x + w, y + h / 2, ANCHOR_WIDTH, ANCHOR_HEIGHT);
+		        this.anchors[EAnchors.eWW.ordinal()].setFrame(x, y + h / 2, ANCHOR_WIDTH, ANCHOR_HEIGHT);
+		        this.anchors[EAnchors.eNW.ordinal()].setFrame(x, y, ANCHOR_WIDTH, ANCHOR_HEIGHT);
+		        this.anchors[EAnchors.eNE.ordinal()].setFrame(x + w, y, ANCHOR_WIDTH, ANCHOR_HEIGHT);
+		        this.anchors[EAnchors.eSW.ordinal()].setFrame(x, y + h, ANCHOR_WIDTH, ANCHOR_HEIGHT);
+		        this.anchors[EAnchors.eSE.ordinal()].setFrame(x + w, y + h, ANCHOR_WIDTH, ANCHOR_HEIGHT);
+		    }
+		 for (Ellipse2D.Float anchor : this.anchors) {
+				Graphics2D graphics2D = null;
+				graphics2D.draw(anchor);
+	}
 	}
 
 	public abstract void drag(Graphics graphics);
@@ -166,14 +198,55 @@ public abstract class GShape implements Serializable {
 
 	public void startMove(Graphics graphics, int x, int y) {
 		// 좌표 저장
-		this.setOrigin(x, y);
+				this.ox2 = x;
+				this.oy2 = y;
+				// 새로운 점 저장
+				this.x2 = x;
+				this.y2 = y;
 	};
 
 	public void keepMove(Graphics graphics, int x, int y) {
-		this.movePoint(x, y);
+		// 기존 점을 저장
+				this.ox2 = this.x2;
+				this.oy2 = this.y2;
+				// 새로운 점 저장
+				this.x2 = x;
+				this.y2 = y;
+
+				
+				Graphics2D graphics2D = (Graphics2D) graphics;
+				graphics2D.setXORMode(graphics2D.getBackground());
+				graphics2D.draw(this.shape);
+
+				int dx = x2 - ox2;
+				int dy = y2 - oy2;
+				AffineTransform affineTransform = new AffineTransform();
+				System.out.println("keepMove");
+				affineTransform.setToTranslation(dx, dy);
+				this.shape = affineTransform.createTransformedShape(this.shape);
+				graphics2D.draw(this.shape);
 	};
 
-	public void stopMove(int x, int y) {
+	public void stopMove(Graphics graphics, int x, int y) {
+	}
+
+	public void startResize(Graphics graphics, int x, int y) {
+
+		this.ox2 = x;
+		this.oy2 = y;
+		// 새로운 점 저장
+		this.x2 = x;
+		this.y2 = y;
+	}
+
+	public void keepResize(Graphics graphics, int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void stopResize(Graphics graphics, int x, int y) {
+		// TODO Auto-generated method stub
+		
 	};
 
 }

@@ -1,5 +1,7 @@
-package frames;
+package frames.main;
 
+import frames.timer.GTimer;
+import frames.timer.TMainFrame;
 import interfaces.CountdownListener;
 
 public class GMain {
