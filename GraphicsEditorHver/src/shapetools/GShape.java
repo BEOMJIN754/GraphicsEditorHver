@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 import javax.swing.UIManager;
@@ -51,6 +52,12 @@ public abstract class GShape implements Serializable {
 
 	protected Ellipse2D.Float[] anchors;
 	
+	// 기준점 centerX
+	private double cx, cy;
+	// 변화율
+	private double sx, sy;
+	private double dx, dy;
+	
 	//앵커 fill할때 테두리가 흰색으로 남지 않게 하기위함
 	private Color defaultBackground;
 	// setters and getters
@@ -87,6 +94,11 @@ public abstract class GShape implements Serializable {
 		this.y2 = 0;
 		this.ox2 = 0;
 		this.oy2 = 0;
+		
+		this.sx = 1.0;
+		this.sy = 1.0;
+		this.dx = 0.0;
+		this.dy = 0.0;
 
 	}
 
@@ -220,8 +232,8 @@ public abstract class GShape implements Serializable {
 		this.y2 = y;
 
 		// 도형을 이동할 변위 계산
-		int dx = this.x2 - ox2;
-		int dy = this.y2 - oy2;
+		dx = this.x2 - ox2;
+		dy = this.y2 - oy2;
 
 		// AffineTransform을 사용하여 도형 이동
 		AffineTransform affineTransform = AffineTransform.getTranslateInstance(dx, dy);
@@ -237,21 +249,114 @@ public abstract class GShape implements Serializable {
 	}
 
 	public void startResize(Graphics graphics, int x, int y) {
+		this.eraseAnchors(graphics);
 
-		this.ox2 = x;
-		this.oy2 = y;
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setPaintMode();
+		graphics2D.draw(this.shape);
+		
+		this.ox2 = x2;
+		this.oy2 = x2;
 		// 새로운 점 저장
 		this.x2 = x;
 		this.y2 = y;
 	}
-
+	
 	public void keepResize(Graphics graphics, int x, int y) {
-		// TODO Auto-generated method stub
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setXORMode(graphics2D.getBackground());
+		graphics2D.draw(this.shape);
+
+		Rectangle bounds = this.shape.getBounds();
+		double w = bounds.getWidth();
+		double h = bounds.getHeight();
+
+		AffineTransform affineTransform = new AffineTransform();
+
+		switch (this.eSelectedAnchor) {
+		case eEE:
+			// Right edge anchor
+			sx = (x - bounds.getX()) / w;
+			cx = bounds.getX();
+			affineTransform.translate(cx, bounds.getY());
+			affineTransform.scale(sx, 1);
+			affineTransform.translate(-cx, -bounds.getY());
+			break;
+		case eWW:
+			// Left edge anchor
+			sx = (bounds.getX() + w - x) / w;
+			cx = bounds.getX() + w;
+			affineTransform.translate(cx, bounds.getY());
+			affineTransform.scale(sx, 1);
+			affineTransform.translate(-cx, -bounds.getY());
+			break;
+		case eSS:
+			// Bottom edge anchor
+			sy = (y - bounds.getY()) / h;
+			cy = bounds.getY();
+			affineTransform.translate(bounds.getX(), cy);
+			affineTransform.scale(1, sy);
+			affineTransform.translate(-bounds.getX(), -cy);
+			break;
+		case eNN:
+			// Top edge anchor
+			sy = (bounds.getY() + h - y) / h;
+			cy = bounds.getY() + h;
+			affineTransform.translate(bounds.getX(), cy);
+			affineTransform.scale(1, sy);
+			affineTransform.translate(-bounds.getX(), -cy);
+			break;
+		case eNE:
+			// Right top corner
+			sx = (x - bounds.getX()) / w;
+			sy = (bounds.getY() + h - y) / h;
+			cx = bounds.getX();
+			cy = bounds.getY() + h;
+			affineTransform.translate(cx, cy);
+			affineTransform.scale(sx, sy);
+			affineTransform.translate(-cx, -cy);
+			break;
+		case eNW:
+			// Left top corner
+			sx = (bounds.getX() + w - x) / w;
+			sy = (bounds.getY() + h - y) / h;
+			cx = bounds.getX() + w;
+			cy = bounds.getY() + h;
+			affineTransform.translate(cx, cy);
+			affineTransform.scale(sx, sy);
+			affineTransform.translate(-cx, -cy);
+			break;
+		case eSE:
+			// Right bottom corner
+			sx = (x - bounds.getX()) / w;
+			sy = (y - bounds.getY()) / h;
+			cx = bounds.getX();
+			cy = bounds.getY();
+			affineTransform.translate(cx, cy);
+			affineTransform.scale(sx, sy);
+			affineTransform.translate(-cx, -cy);
+			break;
+		case eSW:
+			// Left bottom corner
+			sx = (bounds.getX() + w - x) / w;
+			sy = (y - bounds.getY()) / h;
+			cx = bounds.getX() + w;
+			cy = bounds.getY();
+			affineTransform.translate(cx, cy);
+			affineTransform.scale(sx, sy);
+			affineTransform.translate(-cx, -cy);
+			break;
+		default:
+			return;
+		}
+
+		this.shape = affineTransform.createTransformedShape(this.shape);
+		graphics2D.draw(this.shape);
 
 	}
 
 	public void stopResize(Graphics graphics, int x, int y) {
-		// TODO Auto-generated method stub
+		this.drawAnchors(graphics);
 
 	}
 // ㅡㅡㅡㅡㅡㅡㅡㅡ얘로 앵커가 이미 있으면 false, 없으면 트루 반환하려 함.
