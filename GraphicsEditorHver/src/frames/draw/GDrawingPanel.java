@@ -1,27 +1,14 @@
 package frames.draw;
 
-import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Polygon;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.util.Vector;
 
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
-import frames.color.GColorPanel;
 import shapetools.GShape;
 import shapetools.GShape.EAnchors;
 import shapetools.GShape.EDrawingStyle;
@@ -51,7 +38,6 @@ public class GDrawingPanel extends JPanel {
 	private Vector<GShape> shapes;
 	private GShape shapeTool;
 	private GShape currentShape;
-	private GColorPanel colorpanel;
 
 	// constructors
 	public GDrawingPanel() {
@@ -74,9 +60,6 @@ public class GDrawingPanel extends JPanel {
 
 	}
 
-	public void associate(GColorPanel colorPanel) {
-		this.colorpanel = colorPanel;
-	}
 
 	// setters and getters
 	public void setShapeTool(GShape shapeTool) {
@@ -129,7 +112,7 @@ public class GDrawingPanel extends JPanel {
 	private void stopDrawing(int x, int y) {
 		// currentShape.addPoint(x, y);
 		shapes.add(currentShape);
-		currentShape.setSelected(getGraphics());
+		//currentShape.setSelected(getGraphics());
 		
 	}
 
@@ -216,7 +199,6 @@ public class GDrawingPanel extends JPanel {
 					// 도형 내 클릭했을 때 MOVE
 				} else {
 					if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
-						
 						currentShape.startMove(getGraphics(), e.getX(), e.getY());
 					} else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
 

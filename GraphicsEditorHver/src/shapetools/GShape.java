@@ -10,7 +10,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.io.Serializable;
 
-import shapetools.GShape.EAnchors;
+import javax.swing.UIManager;
 
 public abstract class GShape implements Serializable {
 
@@ -50,7 +50,9 @@ public abstract class GShape implements Serializable {
 	private EAnchors eSelectedAnchor;
 
 	protected Ellipse2D.Float[] anchors;
-
+	
+	//앵커 fill할때 테두리가 흰색으로 남지 않게 하기위함
+	private Color defaultBackground;
 	// setters and getters
 	public void setSelected(Graphics graphics) {
 		this.drawAnchors(graphics);
@@ -76,7 +78,9 @@ public abstract class GShape implements Serializable {
 
 		this.anchors = null;
 		this.eSelectedAnchor = null;
-
+		//basic panel color=> UIManager가 알고있음 
+		this.defaultBackground = UIManager.getColor("Panel.background");
+		
 		this.x1 = 0;
 		this.y1 = 0;
 		this.x2 = 0;
@@ -117,7 +121,7 @@ public abstract class GShape implements Serializable {
 		this.anchors[EAnchors.eSE.ordinal()] = new Ellipse2D.Float(x + w, y + h, ANCHOR_WIDTH, ANCHOR_HEIGHT);
 
 		for (Ellipse2D.Float anchor : this.anchors) {
-			graphics2D.setColor(Color.WHITE);
+			graphics2D.setColor(defaultBackground);
 			graphics2D.fill(anchor);
 			graphics2D.setColor(Color.BLACK);
 			graphics2D.draw(anchor);
@@ -133,7 +137,7 @@ public abstract class GShape implements Serializable {
 			graphics2D.setXORMode(graphics2D.getBackground());
 
 			for (Ellipse2D.Float anchor : this.anchors) {
-				graphics2D.setColor(Color.WHITE);
+				graphics2D.setColor(defaultBackground);
 				graphics2D.fill(anchor);
 				graphics2D.setColor(Color.BLACK);
 				graphics2D.draw(anchor);
@@ -188,6 +192,7 @@ public abstract class GShape implements Serializable {
 
 	public void startMove(Graphics graphics, int x, int y) {
 		this.eraseAnchors(graphics);
+
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		graphics2D.setPaintMode();
 		graphics2D.draw(this.shape);
@@ -198,33 +203,35 @@ public abstract class GShape implements Serializable {
 		this.x2 = x;
 		this.y2 = y;
 	};
+
 	public void keepMove(Graphics graphics, int x, int y) {
-	    Graphics2D graphics2D = (Graphics2D) graphics;
+		Graphics2D graphics2D = (Graphics2D) graphics;
 
-	    // 이전에 그려진 도형을 지우기 위해 XOR 모드로 설정
-	    graphics2D.setXORMode(graphics2D.getBackground());
-	    graphics2D.draw(this.shape);
+		// 이전에 그려진 도형을 지우기 위해 XOR 모드로 설정
+		graphics2D.setXORMode(graphics2D.getBackground());
+		graphics2D.draw(this.shape);
 
-	    // 기존 점을 저장
-	    int ox2 = this.x2;
-	    int oy2 = this.y2;
+		// 기존 점을 저장
+		int ox2 = this.x2;
+		int oy2 = this.y2;
 
-	    // 새로운 점 저장
-	    this.x2 = x;
-	    this.y2 = y;
+		// 새로운 점 저장
+		this.x2 = x;
+		this.y2 = y;
 
-	    // 도형을 이동할 변위 계산
-	    int dx = this.x2 - ox2;
-	    int dy = this.y2 - oy2;
+		// 도형을 이동할 변위 계산
+		int dx = this.x2 - ox2;
+		int dy = this.y2 - oy2;
 
-	    // AffineTransform을 사용하여 도형 이동
-	    AffineTransform affineTransform = AffineTransform.getTranslateInstance(dx, dy);
-	    this.shape = affineTransform.createTransformedShape(this.shape);
+		// AffineTransform을 사용하여 도형 이동
+		AffineTransform affineTransform = AffineTransform.getTranslateInstance(dx, dy);
+		this.shape = affineTransform.createTransformedShape(this.shape);
 
-	    // 이동된 도형을 다시 그리기
-	    graphics2D.draw(this.shape);
+		// 이동된 도형을 다시 그리기
+		graphics2D.draw(this.shape);
 
 	}
+
 	public void stopMove(Graphics graphics, int x, int y) {
 		this.drawAnchors(graphics);
 	}
@@ -247,7 +254,7 @@ public abstract class GShape implements Serializable {
 		// TODO Auto-generated method stub
 
 	}
-// ㅡㅡㅡㅡㅡㅡㅡㅡ얘로 앵커가 이미 있으면 false, 없으면 트로 반환하려 함.
+// ㅡㅡㅡㅡㅡㅡㅡㅡ얘로 앵커가 이미 있으면 false, 없으면 트루 반환하려 함.
 //	public boolean anchorExist() {
 //		if(eSelectedAnchor != null) {
 //		return true;
