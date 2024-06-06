@@ -49,7 +49,6 @@ public class GFileMenu extends JMenu {
 	                new BufferedInputStream(new FileInputStream(file))); // 이미 생성한 File 객체 사용
 	        Object object = objectInputStream.readObject();
 	        this.drawingpanel.setShapes(object);
-	        this.drawingpanel.repaint();
 	        objectInputStream.close(); 
 	    } catch (IOException | ClassNotFoundException e) {
 	        e.printStackTrace(); 

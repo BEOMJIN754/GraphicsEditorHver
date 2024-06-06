@@ -55,6 +55,9 @@ public class GDrawingPanel extends JPanel {
 
 	// constructors
 	public GDrawingPanel() {
+		
+		 //this.setBackground(Color.WHITE);
+		
 		MouseEventHandler mouseEventHandler = new MouseEventHandler();
 		jColorChooser = new JColorChooser();
 		this.addMouseListener(mouseEventHandler);
@@ -101,6 +104,7 @@ public class GDrawingPanel extends JPanel {
 	private void startDrawing(int x, int y) {
 		currentShape = shapeTool.clone();
 		currentShape.setOrigin(x, y);
+		
 	}
 
 	private void keepDrawing(int x, int y) {
@@ -126,6 +130,7 @@ public class GDrawingPanel extends JPanel {
 		// currentShape.addPoint(x, y);
 		shapes.add(currentShape);
 		currentShape.setSelected(getGraphics());
+		
 	}
 
 	public void keepMoving(int x, int y) {
@@ -149,7 +154,6 @@ public class GDrawingPanel extends JPanel {
 			this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		} else {
 			this.setCursor(shape.getCursor());
-			System.out.println("123");
 		}
 
 	}
@@ -212,6 +216,7 @@ public class GDrawingPanel extends JPanel {
 					// 도형 내 클릭했을 때 MOVE
 				} else {
 					if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
+						
 						currentShape.startMove(getGraphics(), e.getX(), e.getY());
 					} else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
 

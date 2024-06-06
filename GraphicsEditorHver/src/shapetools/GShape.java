@@ -58,6 +58,7 @@ public abstract class GShape implements Serializable {
 
 	public void clearSelected() {
 		this.anchors = null;
+		drawAnchors(null);
 	}
 
 	public EAnchors getSelectedAnchor() {
@@ -72,10 +73,10 @@ public abstract class GShape implements Serializable {
 	public GShape(EDrawingStyle eDrawingStyle, Shape shape) {
 		this.eDrawingStyle = eDrawingStyle;
 		this.shape = shape;
-		
+
 		this.anchors = null;
 		this.eSelectedAnchor = null;
-		
+
 		this.x1 = 0;
 		this.y1 = 0;
 		this.x2 = 0;
@@ -92,12 +93,13 @@ public abstract class GShape implements Serializable {
 		graphics2D.draw(shape);
 	};
 
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ앵커 그리기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	private void drawAnchors(Graphics graphics) {
 		Graphics2D graphics2D = (Graphics2D) graphics;
 
 		Rectangle rectangle = this.shape.getBounds();
-		int x = rectangle.x -5;
-		int y = rectangle.y -5;
+		int x = rectangle.x - 5;
+		int y = rectangle.y - 5;
 		int w = rectangle.width;
 		int h = rectangle.height;
 		int ANCHOR_WIDTH = 10;
@@ -119,9 +121,24 @@ public abstract class GShape implements Serializable {
 			graphics2D.fill(anchor);
 			graphics2D.setColor(Color.BLACK);
 			graphics2D.draw(anchor);
-			
+
 		}
 
+	}
+
+//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡeraseAnchorㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	private void eraseAnchors(Graphics graphics) {
+		if (this.anchors != null) {
+			Graphics2D graphics2D = (Graphics2D) graphics;
+			graphics2D.setXORMode(graphics2D.getBackground());
+
+			for (Ellipse2D.Float anchor : this.anchors) {
+				graphics2D.setColor(Color.WHITE);
+				graphics2D.fill(anchor);
+				graphics2D.setColor(Color.BLACK);
+				graphics2D.draw(anchor);
+			}
+		}
 	}
 
 	public void setOrigin(int x1, int y1) {
@@ -142,92 +159,74 @@ public abstract class GShape implements Serializable {
 		this.y2 = y2;
 	}
 
-	private void updateAnchors() {
-		 if (this.anchors != null) {
-		        Rectangle bounds = this.shape.getBounds();
-		        int x = bounds.x;
-		        int y = bounds.y;
-		        int w = bounds.width;
-		        int h = bounds.height;
-		        int ANCHOR_WIDTH = 10;
-		        int ANCHOR_HEIGHT = 10;
-
-		        this.anchors[EAnchors.eRR.ordinal()].setFrame(x + w / 2, y - 30, ANCHOR_WIDTH, ANCHOR_HEIGHT);
-		        this.anchors[EAnchors.eNN.ordinal()].setFrame(x + w / 2, y, ANCHOR_WIDTH, ANCHOR_HEIGHT);
-		        this.anchors[EAnchors.eSS.ordinal()].setFrame(x + w / 2, y + h, ANCHOR_WIDTH, ANCHOR_HEIGHT);
-		        this.anchors[EAnchors.eEE.ordinal()].setFrame(x + w, y + h / 2, ANCHOR_WIDTH, ANCHOR_HEIGHT);
-		        this.anchors[EAnchors.eWW.ordinal()].setFrame(x, y + h / 2, ANCHOR_WIDTH, ANCHOR_HEIGHT);
-		        this.anchors[EAnchors.eNW.ordinal()].setFrame(x, y, ANCHOR_WIDTH, ANCHOR_HEIGHT);
-		        this.anchors[EAnchors.eNE.ordinal()].setFrame(x + w, y, ANCHOR_WIDTH, ANCHOR_HEIGHT);
-		        this.anchors[EAnchors.eSW.ordinal()].setFrame(x, y + h, ANCHOR_WIDTH, ANCHOR_HEIGHT);
-		        this.anchors[EAnchors.eSE.ordinal()].setFrame(x + w, y + h, ANCHOR_WIDTH, ANCHOR_HEIGHT);
-		    }
-		 for (Ellipse2D.Float anchor : this.anchors) {
-				Graphics2D graphics2D = null;
-				graphics2D.draw(anchor);
-	}
-	}
-
 	public abstract void drag(Graphics graphics);
 
 	// ploygon 그리기용
 	public abstract void click(Graphics graphics);
 
-	
 	public void addPoint(int x2, int y2) {
 		this.x2 = x2;
 		this.y2 = y2;
 	}
 
 	public boolean onShape(int x, int y) {
-	    this.eSelectedAnchor = null;
-	    if (this.anchors != null) {
-	        for (int i = 0; i < EAnchors.values().length - 1; i++) {
-	            if (anchors[i].contains(x, y)) {
-	                this.eSelectedAnchor = EAnchors.values()[i];
-	                return true;
-	            }
-	        }
-	    }
-	    boolean isOnShape = this.shape.contains(x, y)||  this.shape.getBounds2D().contains(x, y);
-	    if (isOnShape) {
-	        this.eSelectedAnchor = EAnchors.eMM;
-	    }
-	    return isOnShape;
+		this.eSelectedAnchor = null;
+		if (this.anchors != null) {
+			for (int i = 0; i < EAnchors.values().length - 1; i++) {
+				if (anchors[i].contains(x, y)) {
+					this.eSelectedAnchor = EAnchors.values()[i];
+					return true;
+				}
+			}
+		}
+		boolean isOnShape = this.shape.contains(x, y) || this.shape.getBounds2D().contains(x, y);
+		if (isOnShape) {
+			this.eSelectedAnchor = EAnchors.eMM;
+		}
+		return isOnShape;
 	}
 
 	public void startMove(Graphics graphics, int x, int y) {
+		this.eraseAnchors(graphics);
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setPaintMode();
+		graphics2D.draw(this.shape);
 		// 좌표 저장
-				this.ox2 = x;
-				this.oy2 = y;
-				// 새로운 점 저장
-				this.x2 = x;
-				this.y2 = y;
+		this.ox2 = x;
+		this.oy2 = y;
+		// 새로운 점 저장
+		this.x2 = x;
+		this.y2 = y;
 	};
-
 	public void keepMove(Graphics graphics, int x, int y) {
-		// 기존 점을 저장
-				this.ox2 = this.x2;
-				this.oy2 = this.y2;
-				// 새로운 점 저장
-				this.x2 = x;
-				this.y2 = y;
+	    Graphics2D graphics2D = (Graphics2D) graphics;
 
-				
-				Graphics2D graphics2D = (Graphics2D) graphics;
-				graphics2D.setXORMode(graphics2D.getBackground());
-				graphics2D.draw(this.shape);
+	    // 이전에 그려진 도형을 지우기 위해 XOR 모드로 설정
+	    graphics2D.setXORMode(graphics2D.getBackground());
+	    graphics2D.draw(this.shape);
 
-				int dx = x2 - ox2;
-				int dy = y2 - oy2;
-				AffineTransform affineTransform = new AffineTransform();
-				System.out.println("keepMove");
-				affineTransform.setToTranslation(dx, dy);
-				this.shape = affineTransform.createTransformedShape(this.shape);
-				graphics2D.draw(this.shape);
-	};
+	    // 기존 점을 저장
+	    int ox2 = this.x2;
+	    int oy2 = this.y2;
 
+	    // 새로운 점 저장
+	    this.x2 = x;
+	    this.y2 = y;
+
+	    // 도형을 이동할 변위 계산
+	    int dx = this.x2 - ox2;
+	    int dy = this.y2 - oy2;
+
+	    // AffineTransform을 사용하여 도형 이동
+	    AffineTransform affineTransform = AffineTransform.getTranslateInstance(dx, dy);
+	    this.shape = affineTransform.createTransformedShape(this.shape);
+
+	    // 이동된 도형을 다시 그리기
+	    graphics2D.draw(this.shape);
+
+	}
 	public void stopMove(Graphics graphics, int x, int y) {
+		this.drawAnchors(graphics);
 	}
 
 	public void startResize(Graphics graphics, int x, int y) {
@@ -241,12 +240,21 @@ public abstract class GShape implements Serializable {
 
 	public void keepResize(Graphics graphics, int x, int y) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void stopResize(Graphics graphics, int x, int y) {
 		// TODO Auto-generated method stub
-		
-	};
+
+	}
+// ㅡㅡㅡㅡㅡㅡㅡㅡ얘로 앵커가 이미 있으면 false, 없으면 트로 반환하려 함.
+//	public boolean anchorExist() {
+//		if(eSelectedAnchor != null) {
+//		return true;
+//		}
+//		else {
+//			return false;
+//		}
+//	};
 
 }

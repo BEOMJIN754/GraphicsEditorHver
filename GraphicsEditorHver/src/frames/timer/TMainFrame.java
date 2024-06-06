@@ -17,7 +17,7 @@ public class TMainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// 타이머 레이블 초기화
-		this.timerLabel = new JLabel("5", SwingConstants.CENTER);
+		this.timerLabel = new JLabel("3", SwingConstants.CENTER);
 		this.timerLabel.setFont(new Font("Serif", Font.BOLD, 48));
 		// -----------------------
 		// 이미지 레이블 설정
