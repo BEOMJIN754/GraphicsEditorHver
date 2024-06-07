@@ -53,15 +53,16 @@ public abstract class GShape implements Serializable {
 	private EAnchors eSelectedAnchor;
 
 	protected Ellipse2D.Float[] anchors;
-	
+
 	// 기준점 centerX
 	private double cx, cy;
 	// 변화율
 	private double sx, sy;
 	private double dx, dy;
-	
-	//앵커 fill할때 테두리가 흰색으로 남지 않게 하기위함
+
+	// 앵커 fill할때 테두리가 흰색으로 남지 않게 하기위함
 	private Color defaultBackground;
+
 	// setters and getters
 	public void setSelected(Graphics graphics) {
 		this.drawAnchors(graphics);
@@ -87,16 +88,16 @@ public abstract class GShape implements Serializable {
 
 		this.anchors = null;
 		this.eSelectedAnchor = null;
-		//basic panel color=> UIManager가 알고있음 
+		// basic panel color=> UIManager가 알고있음
 		this.defaultBackground = UIManager.getColor("Panel.background");
-		
+
 		this.x1 = 0;
 		this.y1 = 0;
 		this.x2 = 0;
 		this.y2 = 0;
 		this.ox2 = 0;
 		this.oy2 = 0;
-		
+
 		this.sx = 1.0;
 		this.sy = 1.0;
 		this.dx = 0.0;
@@ -249,23 +250,22 @@ public abstract class GShape implements Serializable {
 	public void stopMove(Graphics graphics, int x, int y) {
 		this.drawAnchors(graphics);
 	}
-	
 
-	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡresizeㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡresizeㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	public void startResize(Graphics graphics, int x, int y) {
 		this.eraseAnchors(graphics);
 
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		graphics2D.setPaintMode();
 		graphics2D.draw(this.shape);
-		
+
 		this.ox2 = x2;
 		this.oy2 = x2;
 		// 새로운 점 저장
 		this.x2 = x;
 		this.y2 = y;
 	}
-	
+
 	public void keepResize(Graphics graphics, int x, int y) {
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		graphics2D.setXORMode(graphics2D.getBackground());
@@ -282,9 +282,9 @@ public abstract class GShape implements Serializable {
 			// Right edge anchor
 			sx = (x - bounds.getX()) / w;
 			cx = bounds.getX();
-			//affineTransform.translate(cx, bounds.getY());
+			affineTransform.translate(cx, bounds.getY());
 			affineTransform.scale(sx, 1);
-			//affineTransform.translate(-cx, -bounds.getY());
+			affineTransform.translate(-cx, -bounds.getY());
 			break;
 		case eWW:
 			// Left edge anchor
@@ -373,52 +373,68 @@ public abstract class GShape implements Serializable {
 //		}
 //	};
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡrotateㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	
+
+	private double previousAngle = 0; // 이전 각도를 저장할 변수
+
 	public void startRotate(Graphics graphics, int x, int y) {
 		this.eraseAnchors(graphics);
 
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		graphics2D.setPaintMode();
 		graphics2D.draw(this.shape);
-		
-		this.ox2 = x2;
-		this.oy2 = x2;
-		// 새로운 점 저장
+
+		this.ox2 = this.x2;
+		this.oy2 = this.y2;
+
 		this.x2 = x;
 		this.y2 = y;
-		
 	}
-	
+
 	public double getRotateFactor() {
-		double startX = this.anchors[EAnchors.eWW.ordinal()].getCenterX();
-		double startY = this.anchors[EAnchors.eWW.ordinal()].getCenterY();
-		cx = this.shape.getBounds().getCenterX();
-		cy = this.shape.getBounds().getCenterY();
-		
-		
-		double basicAngle = Math.toDegrees(Math.atan2(cx-startX, cy-startY));
-		double afterAngle = Math.toDegrees(Math.atan2(cx-x2, cy-y2));
-		double rotateAngle = Math.toDegrees(basicAngle-afterAngle);
-		
+		double startX = this.anchors[EAnchors.eRR.ordinal()].getCenterX();
+		double startY = this.anchors[EAnchors.eRR.ordinal()].getCenterY();
+
+		this.cx = this.shape.getBounds().getCenterX();
+		this.cy = this.shape.getBounds().getCenterY();
+
+		double basicAngle = Math.toDegrees(Math.atan2(startY - cy, startX - cx));
+		double afterAngle = Math.toDegrees(Math.atan2(this.y2 - cy, this.x2 - cx));
+
+		// 이전 각도에서 현재 각도를 빼서 회전 각도를 계산
+		double rotateAngle = afterAngle - basicAngle;
 		if (rotateAngle < 0) {
 			rotateAngle += 360;
 		}
-		
+
+		System.out.println(
+				"Basic angle: " + basicAngle + ", After angle: " + afterAngle + ", Rotate angle: " + rotateAngle);
+
 		return rotateAngle;
 	}
+
 	public void keepRotate(Graphics graphics, int x, int y) {
+		this.x2 = x;
+		this.y2 = y;
+
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		graphics2D.setXORMode(graphics2D.getBackground());
 		graphics2D.draw(this.shape);
-		
+
+		double currentAngle = Math.toRadians(getRotateFactor());
+		double previousAngleRad = Math.toRadians(previousAngle);
+
 		AffineTransform affineTransform = new AffineTransform();
-		affineTransform.rotate(Math.toRadians(getRotateFactor()), cx, cy);
+		double angle = currentAngle - previousAngleRad;
+		affineTransform.rotate(angle, cx, cy);
+
 		this.shape = affineTransform.createTransformedShape(this.shape);
 		graphics2D.draw(this.shape);
+
+		previousAngle = getRotateFactor(); // 현재 각도를 이전 각도로 업데이트
 	}
-	
+
 	public void stopRotate(Graphics graphics, int x, int y) {
 		this.drawAnchors(graphics);
 	}
-	
+
 }
