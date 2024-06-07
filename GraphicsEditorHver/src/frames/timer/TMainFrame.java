@@ -13,7 +13,6 @@ public class TMainFrame extends JFrame {
 
 	public TMainFrame() {
 		setTitle("Loading ...");
-		//setSize(200, 200);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// 타이머 레이블 초기화
@@ -26,7 +25,8 @@ public class TMainFrame extends JFrame {
 		//this.imageLabel.setSize(new Dimension(50, 50));
 		// -----------------------
 		// 패널 설정
-		JPanel panel = new JPanel(new BorderLayout()); 
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBackground(Color.WHITE);
 		panel.add(timerLabel, BorderLayout.NORTH); 
 		panel.add(imageLabel, BorderLayout.CENTER); 
 		// -----------------------

@@ -1,6 +1,7 @@
 package frames.draw;
 
 import java.awt.Cursor;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -78,11 +79,11 @@ public class GDrawingPanel extends JPanel {
 
 	// methods
 
-//	public void paint(Graphics graphics) {
-//		for (GShape shape : shapes) {
-//			shape.draw(graphics);
-//		}
-//	}
+	public void paint(Graphics graphics) {
+		for (GShape shape : shapes) {
+			shape.draw(graphics);
+		}
+	}
 
 	private void startDrawing(int x, int y) {
 		currentShape = shapeTool.clone();
@@ -201,7 +202,7 @@ public class GDrawingPanel extends JPanel {
 					if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
 						currentShape.startMove(getGraphics(), e.getX(), e.getY());
 					} else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
-
+						currentShape.startRotate(getGraphics(), e.getX(), e.getY());
 					} else {
 						currentShape.startResize(getGraphics(), e.getX(), e.getY());
 					}
@@ -220,7 +221,7 @@ public class GDrawingPanel extends JPanel {
 				if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
 					currentShape.keepMove(getGraphics(), e.getX(), e.getY());
 				} else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
-
+					currentShape.keepRotate(getGraphics(), e.getX(), e.getY());
 				} else {
 					currentShape.keepResize(getGraphics(), e.getX(), e.getY());
 				}
@@ -238,7 +239,7 @@ public class GDrawingPanel extends JPanel {
 				if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
 					currentShape.stopMove(getGraphics(), e.getX(), e.getY());
 				} else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
-
+					currentShape.stopRotate(getGraphics(),e.getX(),e.getY());
 				} else {
 					currentShape.stopResize(getGraphics(), e.getX(), e.getY());
 				}

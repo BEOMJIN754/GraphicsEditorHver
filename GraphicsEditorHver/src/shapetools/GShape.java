@@ -13,6 +13,8 @@ import java.io.Serializable;
 
 import javax.swing.UIManager;
 
+import shapetools.GShape.EAnchors;
+
 public abstract class GShape implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -247,7 +249,9 @@ public abstract class GShape implements Serializable {
 	public void stopMove(Graphics graphics, int x, int y) {
 		this.drawAnchors(graphics);
 	}
+	
 
+	//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡresizeㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	public void startResize(Graphics graphics, int x, int y) {
 		this.eraseAnchors(graphics);
 
@@ -278,9 +282,9 @@ public abstract class GShape implements Serializable {
 			// Right edge anchor
 			sx = (x - bounds.getX()) / w;
 			cx = bounds.getX();
-			affineTransform.translate(cx, bounds.getY());
+			//affineTransform.translate(cx, bounds.getY());
 			affineTransform.scale(sx, 1);
-			affineTransform.translate(-cx, -bounds.getY());
+			//affineTransform.translate(-cx, -bounds.getY());
 			break;
 		case eWW:
 			// Left edge anchor
@@ -368,5 +372,53 @@ public abstract class GShape implements Serializable {
 //			return false;
 //		}
 //	};
+// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡrotateㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+	
+	public void startRotate(Graphics graphics, int x, int y) {
+		this.eraseAnchors(graphics);
 
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setPaintMode();
+		graphics2D.draw(this.shape);
+		
+		this.ox2 = x2;
+		this.oy2 = x2;
+		// 새로운 점 저장
+		this.x2 = x;
+		this.y2 = y;
+		
+	}
+	
+	public double getRotateFactor() {
+		double startX = this.anchors[EAnchors.eWW.ordinal()].getCenterX();
+		double startY = this.anchors[EAnchors.eWW.ordinal()].getCenterY();
+		cx = this.shape.getBounds().getCenterX();
+		cy = this.shape.getBounds().getCenterY();
+		
+		
+		double basicAngle = Math.toDegrees(Math.atan2(cx-startX, cy-startY));
+		double afterAngle = Math.toDegrees(Math.atan2(cx-x2, cy-y2));
+		double rotateAngle = Math.toDegrees(basicAngle-afterAngle);
+		
+		if (rotateAngle < 0) {
+			rotateAngle += 360;
+		}
+		
+		return rotateAngle;
+	}
+	public void keepRotate(Graphics graphics, int x, int y) {
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setXORMode(graphics2D.getBackground());
+		graphics2D.draw(this.shape);
+		
+		AffineTransform affineTransform = new AffineTransform();
+		affineTransform.rotate(Math.toRadians(getRotateFactor()), cx, cy);
+		this.shape = affineTransform.createTransformedShape(this.shape);
+		graphics2D.draw(this.shape);
+	}
+	
+	public void stopRotate(Graphics graphics, int x, int y) {
+		this.drawAnchors(graphics);
+	}
+	
 }
