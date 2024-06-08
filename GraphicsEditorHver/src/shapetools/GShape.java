@@ -53,6 +53,8 @@ public abstract class GShape implements Serializable {
 	private EAnchors eSelectedAnchor;
 
 	protected Ellipse2D.Float[] anchors;
+	
+	private AffineTransform affineTransform;
 
 	// 기준점 centerX
 	private double cx, cy;
@@ -106,6 +108,11 @@ public abstract class GShape implements Serializable {
 	}
 
 	public abstract GShape clone();
+	
+	
+	public Shape getShape () {
+		return this.shape;
+	}
 
 	public void draw(Graphics graphics) {
 		Graphics2D graphics2D = (Graphics2D) graphics;
@@ -113,7 +120,7 @@ public abstract class GShape implements Serializable {
 	};
 
 // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ앵커 그리기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	private void drawAnchors(Graphics graphics) {
+	public void drawAnchors(Graphics graphics) {
 		Graphics2D graphics2D = (Graphics2D) graphics;
 
 		Rectangle rectangle = this.shape.getBounds();
@@ -146,7 +153,7 @@ public abstract class GShape implements Serializable {
 	}
 
 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡeraseAnchorㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-	private void eraseAnchors(Graphics graphics) {
+	public void eraseAnchors(Graphics graphics) {
 		if (this.anchors != null) {
 			Graphics2D graphics2D = (Graphics2D) graphics;
 			graphics2D.setXORMode(graphics2D.getBackground());
@@ -205,51 +212,51 @@ public abstract class GShape implements Serializable {
 		return isOnShape;
 	}
 
-	public void startMove(Graphics graphics, int x, int y) {
-		this.eraseAnchors(graphics);
-
-		Graphics2D graphics2D = (Graphics2D) graphics;
-		graphics2D.setPaintMode();
-		graphics2D.draw(this.shape);
-		// 좌표 저장
-		this.ox2 = x;
-		this.oy2 = y;
-		// 새로운 점 저장
-		this.x2 = x;
-		this.y2 = y;
-	};
-
-	public void keepMove(Graphics graphics, int x, int y) {
-		Graphics2D graphics2D = (Graphics2D) graphics;
-
-		// 이전에 그려진 도형을 지우기 위해 XOR 모드로 설정
-		graphics2D.setXORMode(graphics2D.getBackground());
-		graphics2D.draw(this.shape);
-
-		// 기존 점을 저장
-		int ox2 = this.x2;
-		int oy2 = this.y2;
-
-		// 새로운 점 저장
-		this.x2 = x;
-		this.y2 = y;
-
-		// 도형을 이동할 변위 계산
-		dx = this.x2 - ox2;
-		dy = this.y2 - oy2;
-
-		// AffineTransform을 사용하여 도형 이동
-		AffineTransform affineTransform = AffineTransform.getTranslateInstance(dx, dy);
-		this.shape = affineTransform.createTransformedShape(this.shape);
-
-		// 이동된 도형을 다시 그리기
-		graphics2D.draw(this.shape);
-
-	}
-
-	public void stopMove(Graphics graphics, int x, int y) {
-		this.drawAnchors(graphics);
-	}
+//	public void startMove(Graphics graphics, int x, int y) {
+//		this.eraseAnchors(graphics);
+//
+//		Graphics2D graphics2D = (Graphics2D) graphics;
+//		graphics2D.setPaintMode();
+//		graphics2D.draw(this.shape);
+//		// 좌표 저장
+//		this.ox2 = x;
+//		this.oy2 = y;
+//		// 새로운 점 저장
+//		this.x2 = x;
+//		this.y2 = y;
+//	};
+//
+//	public void keepMove(Graphics graphics, int x, int y) {
+//		Graphics2D graphics2D = (Graphics2D) graphics;
+//
+//		// 이전에 그려진 도형을 지우기 위해 XOR 모드로 설정
+//		graphics2D.setXORMode(graphics2D.getBackground());
+//		graphics2D.draw(this.shape);
+//
+//		// 기존 점을 저장
+//		int ox2 = this.x2;
+//		int oy2 = this.y2;
+//
+//		// 새로운 점 저장
+//		this.x2 = x;
+//		this.y2 = y;
+//
+//		// 도형을 이동할 변위 계산
+//		dx = this.x2 - ox2;
+//		dy = this.y2 - oy2;
+//
+//		// AffineTransform을 사용하여 도형 이동
+//		 affineTransform = AffineTransform.getTranslateInstance(dx, dy);
+//		this.shape = affineTransform.createTransformedShape(this.shape);
+//
+//		// 이동된 도형을 다시 그리기
+//		graphics2D.draw(this.shape);
+//
+//	}
+//
+//	public void stopMove(Graphics graphics, int x, int y) {
+//		this.drawAnchors(graphics);
+//	}
 
 	// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡresizeㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 	public void startResize(Graphics graphics, int x, int y) {

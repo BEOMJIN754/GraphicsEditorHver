@@ -92,7 +92,7 @@ public class GPolygon extends GShape {
 //		printPoints(yPoints);
 	}
 
-	@Override
+	
 	public void keepMove(Graphics graphics, int x, int y) {
 		Graphics2D graphics2D = (Graphics2D) graphics;
 		graphics2D.setXORMode(graphics2D.getBackground());

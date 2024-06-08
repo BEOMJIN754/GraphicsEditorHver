@@ -2,6 +2,7 @@ package frames.draw;
 
 import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -39,6 +40,7 @@ public class GDrawingPanel extends JPanel {
 	private Vector<GShape> shapes;
 	private GShape shapeTool;
 	private GShape currentShape;
+	private GTransformer transformer;
 
 	// constructors
 	public GDrawingPanel() {
@@ -49,7 +51,6 @@ public class GDrawingPanel extends JPanel {
 		jColorChooser = new JColorChooser();
 		this.addMouseListener(mouseEventHandler);
 		this.addMouseMotionListener(mouseEventHandler);
-//		this.add(jColorChooser);
 
 		this.eDrawingState = EDrawingState.eIdle;
 
@@ -117,10 +118,10 @@ public class GDrawingPanel extends JPanel {
 		
 	}
 
-	public void keepMoving(int x, int y) {
-		currentShape.keepMove(getGraphics(), x, y);
-
-	}
+//	public void keepMoving(int x, int y) {
+//		currentShape.keepMove(getGraphics(), x, y);
+//
+//	}
 
 	private GShape onShape(int x, int y) {
 		for (GShape shape : this.shapes) {
@@ -141,6 +142,42 @@ public class GDrawingPanel extends JPanel {
 		}
 
 	}
+	
+	private void startTransforming(GShape currentShape, int x, int y) {
+		this.currentShape = currentShape;
+		
+		EAnchors eAnchorState = this.currentShape.getSelectedAnchor();
+		switch(eAnchorState) {
+		case eMM:
+			this.transformer = new GMover(this.currentShape);
+			break;
+		case eRR:
+			this.transformer = new GRotater(this.currentShape);
+			break;
+		default:
+			this.transformer = new GResizer(this.currentShape);
+			break;
+		}
+		
+		Graphics2D graphics = (Graphics2D) this.getGraphics();
+		graphics.setXORMode(this.getBackground());
+		this.transformer.startTransforming(graphics, x, y);
+	}
+	
+	public void keepTransforming(int x, int y) {
+		Graphics2D graphics = (Graphics2D) this.getGraphics();
+		graphics.setXORMode(this.getBackground());
+		this.transformer.keepTransforming(graphics, x, y);
+		
+	}
+	
+	public void stopTransforming(int x, int y) {
+		Graphics2D graphics = (Graphics2D) this.getGraphics();
+		this.transformer.stopTransforming(graphics,x,y);
+		
+	}
+
+
 
 	private class MouseEventHandler implements MouseListener, MouseMotionListener {
 
@@ -199,13 +236,7 @@ public class GDrawingPanel extends JPanel {
 					}
 					// 도형 내 클릭했을 때 MOVE
 				} else {
-					if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
-						currentShape.startMove(getGraphics(), e.getX(), e.getY());
-					} else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
-						currentShape.startRotate(getGraphics(), e.getX(), e.getY());
-					} else {
-						currentShape.startResize(getGraphics(), e.getX(), e.getY());
-					}
+					startTransforming(currentShape,e.getX(),e.getY());
 					eDrawingState = EDrawingState.eTransformation;
 				}
 
@@ -218,13 +249,7 @@ public class GDrawingPanel extends JPanel {
 			if (eDrawingState == EDrawingState.e2PState) {
 				keepDrawing(e.getX(), e.getY());
 			} else if (eDrawingState == EDrawingState.eTransformation) {
-				if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
-					currentShape.keepMove(getGraphics(), e.getX(), e.getY());
-				} else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
-					currentShape.keepRotate(getGraphics(), e.getX(), e.getY());
-				} else {
-					currentShape.keepResize(getGraphics(), e.getX(), e.getY());
-				}
+				keepTransforming(e.getX(), e.getY());
 			}
 		}
 
@@ -236,13 +261,7 @@ public class GDrawingPanel extends JPanel {
 				eDrawingState = EDrawingState.eIdle;
 				// 도형 선택한 이후 변형이면 변형 종료
 			} else if (eDrawingState == EDrawingState.eTransformation) {
-				if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
-					currentShape.stopMove(getGraphics(), e.getX(), e.getY());
-				} else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
-					currentShape.stopRotate(getGraphics(),e.getX(),e.getY());
-				} else {
-					currentShape.stopResize(getGraphics(), e.getX(), e.getY());
-				}
+				stopTransforming(e.getX(), e.getY());
 				eDrawingState = EDrawingState.eIdle;
 			}
 
@@ -258,4 +277,7 @@ public class GDrawingPanel extends JPanel {
 
 	}
 
+
+	
+	
 }
