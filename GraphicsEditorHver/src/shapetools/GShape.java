@@ -160,6 +160,13 @@ public abstract class GShape implements Serializable {
 		}
 	}
 
+	public void fillColor(Graphics graphics, Color selectedColor) {
+		Graphics2D graphics2D = (Graphics2D) graphics;
+		graphics2D.setPaint(selectedColor);
+		graphics2D.fill(this.shape);
+		eraseAnchors(graphics2D);
+	}
+	
 	public void setOrigin(int x1, int y1) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -436,5 +443,7 @@ public abstract class GShape implements Serializable {
 	public void stopRotate(Graphics graphics, int x, int y) {
 		this.drawAnchors(graphics);
 	}
+
+	
 
 }

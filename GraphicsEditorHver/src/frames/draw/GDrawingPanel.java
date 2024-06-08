@@ -1,5 +1,6 @@
 package frames.draw;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -39,6 +40,7 @@ public class GDrawingPanel extends JPanel {
 	private Vector<GShape> shapes;
 	private GShape shapeTool;
 	private GShape currentShape;
+	private Color selectedColor;
 
 	// constructors
 	public GDrawingPanel() {
@@ -54,6 +56,8 @@ public class GDrawingPanel extends JPanel {
 		this.eDrawingState = EDrawingState.eIdle;
 
 		this.shapes = new Vector<GShape>();
+		
+		this.selectedColor = Color.WHITE;
 	}
 
 	public void initialize() {
@@ -141,6 +145,12 @@ public class GDrawingPanel extends JPanel {
 		}
 
 	}
+	
+	private void colorChoose() {
+		this.selectedColor = jColorChooser.showDialog(this, "색상선택", selectedColor);
+		currentShape.fillColor(getGraphics(),selectedColor);
+	}
+
 
 	private class MouseEventHandler implements MouseListener, MouseMotionListener {
 
@@ -167,6 +177,11 @@ public class GDrawingPanel extends JPanel {
 				}
 			}
 		}
+		
+		
+			
+
+		
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
@@ -183,35 +198,36 @@ public class GDrawingPanel extends JPanel {
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e) {
-
-			if (eDrawingState == EDrawingState.eIdle) {
-				currentShape = onShape(e.getX(), e.getY());
-				// 선택된 도형이 없을 때
-				if (onShape(e.getX(), e.getY()) == null) {
-					// 2개 점으로 그리는 것들
-					if (shapeTool.getEDrawingStyle() == EDrawingStyle.e2PStyle) {
-						startDrawing(e.getX(), e.getY());
-						eDrawingState = EDrawingState.e2PState;
-					} else {
-						// ploygon drawing (click에서 진행중임)
-
-					}
-					// 도형 내 클릭했을 때 MOVE
-				} else {
-					if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
-						currentShape.startMove(getGraphics(), e.getX(), e.getY());
-					} else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
-						currentShape.startRotate(getGraphics(), e.getX(), e.getY());
-					} else {
-						currentShape.startResize(getGraphics(), e.getX(), e.getY());
-					}
-					eDrawingState = EDrawingState.eTransformation;
-				}
-
-			}
-		}
-
+		public void mousePressed(MouseEvent e) {  
+			if (e.getButton() == MouseEvent.BUTTON3) { // 오른쪽 클릭일 때
+	        currentShape = onShape(e.getX(), e.getY());
+	        if (currentShape != null) {
+	            colorChoose();
+	        }
+	    } else {
+	        if (eDrawingState == EDrawingState.eIdle) {
+	            currentShape = onShape(e.getX(), e.getY());
+	            if (onShape(e.getX(), e.getY()) == null) {
+	                if (shapeTool.getEDrawingStyle() == EDrawingStyle.e2PStyle) {
+	                    startDrawing(e.getX(), e.getY());
+	                    eDrawingState = EDrawingState.e2PState;
+	                } else {
+	                    // ploygon drawing
+	                }
+	            } else {
+	                if (currentShape.getSelectedAnchor() == EAnchors.eMM) {
+	                    currentShape.startMove(getGraphics(), e.getX(), e.getY());
+	                } else if (currentShape.getSelectedAnchor() == EAnchors.eRR) {
+	                    currentShape.startRotate(getGraphics(), e.getX(), e.getY());
+	                } else {
+	                    currentShape.startResize(getGraphics(), e.getX(), e.getY());
+	                }
+	                eDrawingState = EDrawingState.eTransformation;
+	            }
+	        }
+	    }
+	}
+		
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			// 2개 점으로 그리는 것들 그리기 진행중
