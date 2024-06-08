@@ -1,8 +1,8 @@
 package frames.main;
 
+import frames.timer.CountdownListener;
 import frames.timer.GTimer;
 import frames.timer.TMainFrame;
-import interfaces.CountdownListener;
 
 public class GMain {
 
@@ -20,22 +20,7 @@ public class GMain {
 
 		// ----------------------
 		// timer listener
-		CountdownListener listener = new CountdownListener() {
-
-			// timer continue
-			@Override
-			public void onTick(int seconds) {
-				tMainFrame.updateTimerLabel(seconds);
-			}
-
-			// timer end
-			@Override
-			public void onFinish() {
-				tMainFrame.dispose();
-				mainFrame.initialize();
-				mainFrame.setVisible(true);
-			}
-		};
+		CountdownListener listener = new CountdownListener(tMainFrame, mainFrame);
 
 		// ----------------------
 		GTimer countdownTimer = new GTimer(3, listener);

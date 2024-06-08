@@ -1,7 +1,5 @@
 package frames.timer;
 
-import interfaces.CountdownListener;
-
 public class GTimer extends Thread {
 
 	private int countdown;
